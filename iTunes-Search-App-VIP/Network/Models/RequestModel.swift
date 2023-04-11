@@ -45,6 +45,7 @@ extension RequestModel {
     func urlRequest(header: [String: String]? = nil,
                     httpMethod: RequestHTTPMethod? = nil) -> URLRequest {
         var endpoint: String = NetworkManager.shared.baseUrl.appending(path)
+        print(endpoint)
 
         for parameter in parameters {
             if let value = parameter.value as? String {

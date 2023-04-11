@@ -15,13 +15,20 @@ enum Main {
         }
 
         struct Response {
-            let model: SearchResponseModel
+            let model: Images
         }
 
         struct ViewModel {
-            var model: [SearchListViewModel]
+            var model: SearchListViewModel
         }
     }
+}
+
+struct Images {
+    let under100: [URL]
+    let between100250: [URL]
+    let between250500: [URL]
+    let over500: [URL]
 }
 
 enum ImageSize {
@@ -34,9 +41,14 @@ enum ImageSize {
 struct SearchModel {
     let url: URL
     let type: ImageSize
+    let row: Int
+    let section: Int
+    var image: UIImage?
 }
 
 struct SearchListViewModel {
-    let image: UIImage
-    let type: ImageSize
+    let imageGroup1: [URL]
+    let imageGroup2: [URL]
+    let imageGroup3: [URL]
+    let imageGroup4: [URL]
 }

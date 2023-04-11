@@ -30,6 +30,11 @@
 		B4AB684329E586E4003F6506 /* CollectionViewHeaderReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AB684129E586E4003F6506 /* CollectionViewHeaderReusableView.swift */; };
 		B4AB684429E586E4003F6506 /* CollectionViewHeaderReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4AB684229E586E4003F6506 /* CollectionViewHeaderReusableView.xib */; };
 		B4D8493729E1B9840069FE73 /* ImageDownloadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D8493629E1B9840069FE73 /* ImageDownloadOperation.swift */; };
+		B4E29A1729E5BF8A0040B270 /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E29A1129E5BF8A0040B270 /* DetailPresenter.swift */; };
+		B4E29A1A29E5BF8A0040B270 /* DetailModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E29A1429E5BF8A0040B270 /* DetailModels.swift */; };
+		B4E29A1B29E5BF8A0040B270 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E29A1529E5BF8A0040B270 /* DetailViewController.swift */; };
+		B4E29A1C29E5BF8A0040B270 /* DetailInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E29A1629E5BF8A0040B270 /* DetailInteractor.swift */; };
+		B4E29A1E29E5C3BD0040B270 /* DetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E29A1D29E5C3BD0040B270 /* DetailRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +63,11 @@
 		B4AB684129E586E4003F6506 /* CollectionViewHeaderReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewHeaderReusableView.swift; sourceTree = "<group>"; };
 		B4AB684229E586E4003F6506 /* CollectionViewHeaderReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewHeaderReusableView.xib; sourceTree = "<group>"; };
 		B4D8493629E1B9840069FE73 /* ImageDownloadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloadOperation.swift; sourceTree = "<group>"; };
+		B4E29A1129E5BF8A0040B270 /* DetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
+		B4E29A1429E5BF8A0040B270 /* DetailModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModels.swift; sourceTree = "<group>"; };
+		B4E29A1529E5BF8A0040B270 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		B4E29A1629E5BF8A0040B270 /* DetailInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInteractor.swift; sourceTree = "<group>"; };
+		B4E29A1D29E5C3BD0040B270 /* DetailRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +135,7 @@
 				B43CAC1729DEFB350018377B /* AppDelegate.swift */,
 				B43CAC1929DEFB350018377B /* SceneDelegate.swift */,
 				B43CAC2D29DEFDF10018377B /* Main */,
+				B4E29A1029E5BF7A0040B270 /* Detail */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -222,6 +233,18 @@
 			path = CollectionViewHeaderReusableView;
 			sourceTree = "<group>";
 		};
+		B4E29A1029E5BF7A0040B270 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				B4E29A1129E5BF8A0040B270 /* DetailPresenter.swift */,
+				B4E29A1429E5BF8A0040B270 /* DetailModels.swift */,
+				B4E29A1D29E5C3BD0040B270 /* DetailRouter.swift */,
+				B4E29A1529E5BF8A0040B270 /* DetailViewController.swift */,
+				B4E29A1629E5BF8A0040B270 /* DetailInteractor.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -295,17 +318,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				B43CAC3B29DF02320018377B /* NetworkManager.swift in Sources */,
+				B4E29A1C29E5BF8A0040B270 /* DetailInteractor.swift in Sources */,
 				B43CAC1829DEFB350018377B /* AppDelegate.swift in Sources */,
 				B43CAC1A29DEFB350018377B /* SceneDelegate.swift in Sources */,
+				B4E29A1729E5BF8A0040B270 /* DetailPresenter.swift in Sources */,
 				B43CAC4429DF046A0018377B /* SearchRequestModel.swift in Sources */,
 				B43CAC4129DF02B50018377B /* InternetReachability.swift in Sources */,
 				B4D8493729E1B9840069FE73 /* ImageDownloadOperation.swift in Sources */,
 				B43CAC3529DEFE060018377B /* MainWorker.swift in Sources */,
+				B4E29A1E29E5C3BD0040B270 /* DetailRouter.swift in Sources */,
 				B43CAC3429DEFE060018377B /* MainPresenter.swift in Sources */,
 				B43CAC3F29DF024A0018377B /* RequestModel.swift in Sources */,
 				B43CAC3929DEFE060018377B /* MainInteractor.swift in Sources */,
 				B4AB683F29E58119003F6506 /* UIViewController + Extensions.swift in Sources */,
 				B43CAC3729DEFE060018377B /* MainModels.swift in Sources */,
+				B4E29A1A29E5BF8A0040B270 /* DetailModels.swift in Sources */,
+				B4E29A1B29E5BF8A0040B270 /* DetailViewController.swift in Sources */,
 				B43CAC4629DF04E50018377B /* SearchResponseModel.swift in Sources */,
 				B4AB683929E57F71003F6506 /* SearchView.swift in Sources */,
 				B43CAC3629DEFE060018377B /* MainRouter.swift in Sources */,

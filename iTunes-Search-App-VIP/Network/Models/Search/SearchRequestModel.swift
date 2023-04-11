@@ -9,8 +9,25 @@ import Foundation
 
 final class SearchRequestModel: RequestModel {
 
+    var searchTerm: String?
+
     override var path: String {
-        return "term=Swift&media=software&entity=software, iPadSoftware, macSoftware&limit=10"
+        if let searchTerm = searchTerm {
+            return "term=\(searchTerm)&media=software&entity=software, iPadSoftware, macSoftware&limit=20"
+        } else {
+            return "term=&media=software&entity=software, iPadSoftware, macSoftware&limit=20"
+        }
+    }
+
+    init(searchTerm: String) {
+        if searchTerm.contains(" ") {
+            let searchString = searchTerm.replacingOccurrences(of: " ",
+                                                               with: "+")
+            self.searchTerm = searchString
+        } else {
+            self.searchTerm = searchTerm
+        }
+
     }
 }
 

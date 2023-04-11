@@ -37,18 +37,24 @@ class MainWorker {
 
     // MARK: - GET IMAGES USING MAX 3 THREAD
     func getImage(urls: [SearchModel],
-                  completion: @escaping( ImageSize, Data?, URLResponse?, Error?) -> Void?) {
+                  completion: @escaping( SearchModel, URLResponse?, Error?) -> Void?) {
+        guard !urls.isEmpty else { return }
         queue.maxConcurrentOperationCount = 3
 
         let completionOperation = BlockOperation {
             print("Download all images")
         }
-        for item in urls {
+        for index in 0...(urls.count - 1) {
             let operation = DownloadOperation(session: session,
-                                              downloadTaskURL: item.url) { [weak self] data, response, error in
+                                              downloadTaskURL: urls[index].url) { [weak self] data, response, error in
                 guard let _ = self else { return }
-                if error == nil {
-                    completion(item.type, data, response, error)
+                if error == nil,
+                   data != nil {
+                    completion(SearchModel(url: urls[index].url,
+                                           type: urls[index].type,
+                                           row: urls[index].row,
+                                           section: urls[index].section,
+                                           image: UIImage(data: data!)), response, error)
                 }
             }
             completionOperation.addDependency(operation)

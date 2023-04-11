@@ -8,6 +8,7 @@ import UIKit
 
 protocol MainDisplayLogic: AnyObject {
     func displaySearchResults(viewModel: Main.Something.ViewModel)
+    func displaySearchImage(indexPath: IndexPath)
 }
 
 class MainViewController: UIViewController, MainDisplayLogic {
@@ -41,6 +42,7 @@ class MainViewController: UIViewController, MainDisplayLogic {
                                       bundle: nil),
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: "CollectionViewHeaderReusableView")
+        collectionView.isHidden = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 25, right: 20)
         return collectionView
@@ -51,6 +53,11 @@ class MainViewController: UIViewController, MainDisplayLogic {
 
     var sections: [ImageSize] = [.under100, .between100250, .between250500, .over500]
     var sectionTitles: [String] = ["0-100KB", "101-250KB", "251-500KB", "500KB-"]
+
+    var imageGroup1: [URL] = []
+    var imageGroup2: [URL] = []
+    var imageGroup3: [URL] = []
+    var imageGroup4: [URL] = []
 
     // MARK: - Object lifecycle
     override init(nibName nibNameOrNil: String?,
@@ -78,30 +85,19 @@ class MainViewController: UIViewController, MainDisplayLogic {
         router.dataStore = interactor
     }
 
-    // MARK: Routing
-    override func prepare(for segue: UIStoryboardSegue,
-                          sender: Any?)
-    {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
-    }
-
     // MARK: - VIEW LIFECYCLE
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        fetchSearchResult()
+        navigationController?.setNavigationBarHidden(true,
+                                                     animated: false)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupUI()
+        makeViewDismissKeyboard(cancelsTouchesInView: false)
     }
 
     // MARK: - SETUP UI
@@ -130,15 +126,27 @@ class MainViewController: UIViewController, MainDisplayLogic {
     }
     
     // MARK: - GET SEARCH DATA
-    func fetchSearchResult() {
-        let requestModel = SearchRequestModel()
+    func fetchSearchResult(searchTerm: String) {
+        let requestModel = SearchRequestModel(searchTerm: searchTerm)
         let request = Main.Something.Request(model: requestModel)
         interactor?.fetchResults(request: request)
     }
 
     // MARK: - PRESENT SEARCH RESULT
     func displaySearchResults(viewModel: Main.Something.ViewModel) {
+        self.imageGroup1 = viewModel.model.imageGroup1
+        self.imageGroup2 = viewModel.model.imageGroup2
+        self.imageGroup3 = viewModel.model.imageGroup3
+        self.imageGroup4 = viewModel.model.imageGroup4
+        self.collectionView.reloadData()
+    }
 
+    func displaySearchImage(indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.collectionView.performBatchUpdates {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
     }
 }
 
@@ -154,13 +162,13 @@ extension MainViewController: UICollectionViewDataSource {
         let section = self.sections[section]
         switch section {
         case .under100:
-            return 20
+            return imageGroup1.count
         case .between100250:
-            return 10
+            return imageGroup2.count
         case .between250500:
-            return 5
+            return imageGroup3.count
         case .over500:
-            return 2
+            return imageGroup4.count
         }
     }
 
@@ -168,6 +176,10 @@ extension MainViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCVC",
                                                             for: indexPath) as? MainCVC else { return UICollectionViewCell() }
+        if let model = interactor?.images.first(where: { $0.section == indexPath.section && $0.row == indexPath.row }),
+           let image = model.image {
+            cell.fillCell(with: image)
+        }
         return cell
     }
 
@@ -187,7 +199,8 @@ extension MainViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-
+        router?.routeToDetail(destination: DetailViewController(),
+                              indexPath: indexPath)
     }
 }
 
@@ -214,6 +227,15 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
 extension MainViewController: SearchViewDelegate {
 
     func beginEditing(text: String) {
-
+        if !text.isEmpty {
+            self.imageGroup1 = []
+            self.imageGroup2 = []
+            self.imageGroup3 = []
+            self.imageGroup4 = []
+            fetchSearchResult(searchTerm: text)
+            collectionView.isHidden = false
+        } else {
+            collectionView.isHidden = true
+        }
     }
 }

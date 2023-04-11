@@ -7,46 +7,40 @@
 import UIKit
 
 @objc protocol MainRoutingLogic {
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+    func routeToDetail(destination: DetailViewController, indexPath: IndexPath)
 }
 
 protocol MainDataPassing {
   var dataStore: MainDataStore? { get }
 }
 
-class MainRouter: NSObject, MainRoutingLogic, MainDataPassing
-{
+class MainRouter: NSObject, MainRoutingLogic, MainDataPassing {
+
   weak var viewController: MainViewController?
   var dataStore: MainDataStore?
   
   // MARK: Routing
-  
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
+    func routeToDetail(destination: DetailViewController,
+                       indexPath: IndexPath) {
+        let destinationVC = destination
+        var destinationDS = destinationVC.router!.dataStore!
+        navigateToDetail(source: viewController!,
+                         destination: destination)
+        passImageToDetail(source: self.dataStore!,
+                          destination: &destinationDS,
+                          indexPath: indexPath)
+    }
 
   // MARK: Navigation
-  
-  //func navigateToSomewhere(source: MainViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
-  
+    func navigateToDetail(source: MainViewController,
+                          destination: DetailViewController) {
+        source.navigationController?.pushViewController(destination, animated: true)
+    }
+
   // MARK: Passing data
-  
-  //func passDataToSomewhere(source: MainDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+    func passImageToDetail(source: MainDataStore,
+                           destination: inout DetailDataStore,
+                           indexPath: IndexPath) {
+        destination.image = source.images.first(where: { $0.row == indexPath.row && $0.section == indexPath.section })?.image
+    }
 }

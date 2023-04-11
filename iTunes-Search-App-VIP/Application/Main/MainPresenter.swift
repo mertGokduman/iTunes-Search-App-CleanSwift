@@ -8,6 +8,7 @@ import UIKit
 
 protocol MainPresentationLogic {
     func presentSearchResults(response: Main.Something.Response)
+    func displayImage(indexPath: IndexPath)
 }
 
 class MainPresenter: MainPresentationLogic {
@@ -17,11 +18,14 @@ class MainPresenter: MainPresentationLogic {
     // MARK: - Present Search Results
     func presentSearchResults(response: Main.Something.Response) {
 
-//        guard let model = response.model.results else { return }
-//        let viewModel = model.map { item -> SearchListViewModel in
-//            let screenShotUrls = item.screenshotUrls
-//            return SearchListViewModel(screenShotUrls: screenShotUrls ?? [])
-//        }
-//        viewController?.displaySearchResults(viewModel: Main.Something.ViewModel(model: viewModel))
+        let viewModel = SearchListViewModel(imageGroup1: response.model.under100,
+                                            imageGroup2: response.model.between100250,
+                                            imageGroup3: response.model.between250500,
+                                            imageGroup4: response.model.over500)
+        viewController?.displaySearchResults(viewModel: Main.Something.ViewModel(model: viewModel))
+    }
+
+    func displayImage(indexPath: IndexPath) {
+        viewController?.displaySearchImage(indexPath: indexPath)
     }
 }

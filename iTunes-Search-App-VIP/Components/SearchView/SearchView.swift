@@ -24,10 +24,10 @@ class SearchView: UIView {
         textField.layer.borderColor =  UIColor.black.cgColor
         textField.layer.borderWidth = 2
         textField.layer.cornerRadius = 10
-        textField.clearButtonMode = .whileEditing
         textField.leftViewMode = .always
         textField.spellCheckingType = .no
         textField.autocorrectionType = .no
+        textField.returnKeyType = .search
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -55,9 +55,7 @@ class SearchView: UIView {
     // MARK: - SETUP UI
     private func setupUI() {
 
-        tfSearch.addTarget(self,
-                           action: #selector(textFieldDidChange(_:)),
-                           for: .editingChanged)
+        tfSearch.delegate = self
         tfSearch.leftView = imgSearch
         self.addSubview(tfSearch)
         NSLayoutConstraint.activate([
@@ -79,12 +77,21 @@ class SearchView: UIView {
     }
 
     // MARK: - Dynamic Search
-    @objc private func textFieldDidChange(_ textfield: UITextField) {
-        delegate?.beginEditing(text: textfield.text~)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupUI()
+    }
+}
+
+extension SearchView: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.endEditing(true)
+        delegate?.beginEditing(text: textField.text~)
+        return true
+    }
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.beginEditing(text: "")
     }
 }
