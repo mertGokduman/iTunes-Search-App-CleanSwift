@@ -27,6 +27,7 @@ class SearchView: UIView {
         textField.leftViewMode = .always
         textField.spellCheckingType = .no
         textField.autocorrectionType = .no
+        textField.clearButtonMode = .whileEditing
         textField.returnKeyType = .search
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
@@ -76,7 +77,6 @@ class SearchView: UIView {
                                                              ])
     }
 
-    // MARK: - Dynamic Search
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupUI()
@@ -91,7 +91,12 @@ extension SearchView: UITextFieldDelegate {
         return true
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
         delegate?.beginEditing(text: "")
+        return true
     }
+
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        delegate?.beginEditing(text: "")
+//    }
 }

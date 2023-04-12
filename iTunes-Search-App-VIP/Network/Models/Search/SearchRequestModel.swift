@@ -13,9 +13,9 @@ final class SearchRequestModel: RequestModel {
 
     override var path: String {
         if let searchTerm = searchTerm {
-            return "term=\(searchTerm)&media=software&entity=software, iPadSoftware, macSoftware&limit=20"
+            return "term=\(searchTerm)&media=software&entity=software,iPadSoftware,macSoftware&limit=10"
         } else {
-            return "term=&media=software&entity=software, iPadSoftware, macSoftware&limit=20"
+            return "term=&media=software&entity=software, iPadSoftware, macSoftware&limit=10"
         }
     }
 

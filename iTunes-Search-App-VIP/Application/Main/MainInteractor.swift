@@ -13,6 +13,7 @@ struct ImageStr: Identifiable {
 }
 
 protocol MainBusinessLogic: MainDataStore {
+    func resetDataArray()
     func fetchResults(request: Main.Something.Request)
     func rearrangeScreenShots()
     func downloadImages()
@@ -43,6 +44,19 @@ class MainInteractor: MainBusinessLogic {
 
     let dispatchGroup = DispatchGroup()
 
+    // MARK: - Reset Data Arrays
+    func resetDataArray() {
+        self.images = []
+        self.searchResults = []
+        self.imageGroup1 = []
+        self.imageGroup2 = []
+        self.imageGroup3 = []
+        self.imageGroup4 = []
+        self.group1Row = 0
+        self.group2Row = 0
+        self.group3Row = 0
+        self.group4Row = 0
+    }
 
    // MARK: - Fetch Search Results
     func fetchResults(request: Main.Something.Request) {
@@ -53,12 +67,8 @@ class MainInteractor: MainBusinessLogic {
             switch result {
             case .success(let response):
                 guard let results = response.results else { return }
-                if results.isEmpty {
-                    
-                } else {
-                    self.searchResults = results.compactMap { $0.screenshotUrls }.flatMap { $0 }
-                    self.rearrangeScreenShots()
-                }
+                self.searchResults = results.compactMap { $0.screenshotUrls }.flatMap { $0 }
+                self.rearrangeScreenShots()
             case .failure(let error):
                 print(error.rawValue)
             }

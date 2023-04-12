@@ -21,6 +21,15 @@ class MainViewController: UIViewController, MainDisplayLogic {
         return view
     }()
 
+    private lazy var emptyView: EmptyView = {
+        let view = EmptyView()
+        view.backgroundColor = .clear
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -114,6 +123,14 @@ class MainViewController: UIViewController, MainDisplayLogic {
             searchBar.heightAnchor.constraint(equalToConstant: 50)
         ])
 
+        view.addSubview(emptyView)
+        NSLayoutConstraint.activate([
+            emptyView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyView.widthAnchor.constraint(equalToConstant: getScreenSize().width - 40),
+            emptyView.heightAnchor.constraint(equalToConstant: 400)
+        ])
+
         collectionView.delegate = self
         collectionView.dataSource = self
         view.addSubview(collectionView)
@@ -129,16 +146,28 @@ class MainViewController: UIViewController, MainDisplayLogic {
     func fetchSearchResult(searchTerm: String) {
         let requestModel = SearchRequestModel(searchTerm: searchTerm)
         let request = Main.Something.Request(model: requestModel)
+        interactor?.resetDataArray()
         interactor?.fetchResults(request: request)
     }
 
     // MARK: - PRESENT SEARCH RESULT
     func displaySearchResults(viewModel: Main.Something.ViewModel) {
+
         self.imageGroup1 = viewModel.model.imageGroup1
         self.imageGroup2 = viewModel.model.imageGroup2
         self.imageGroup3 = viewModel.model.imageGroup3
         self.imageGroup4 = viewModel.model.imageGroup4
+        let isSearchEmpty = self.imageGroup1.isEmpty &&
+                            self.imageGroup2.isEmpty &&
+                            self.imageGroup3.isEmpty &&
+                            self.imageGroup4.isEmpty
+        self.setHiddens(isSearchEmpty: isSearchEmpty)
         self.collectionView.reloadData()
+    }
+
+    private func setHiddens(isSearchEmpty: Bool) {
+        self.emptyView.isHidden = !isSearchEmpty
+        self.collectionView.isHidden = isSearchEmpty
     }
 
     func displaySearchImage(indexPath: IndexPath) {
@@ -233,9 +262,14 @@ extension MainViewController: SearchViewDelegate {
             self.imageGroup3 = []
             self.imageGroup4 = []
             fetchSearchResult(searchTerm: text)
-            collectionView.isHidden = false
         } else {
-            collectionView.isHidden = true
+            self.imageGroup1 = []
+            self.imageGroup2 = []
+            self.imageGroup3 = []
+            self.imageGroup4 = []
+            interactor?.resetDataArray()
+            self.collectionView.reloadData()
+            self.setHiddens(isSearchEmpty: true)
         }
     }
 }

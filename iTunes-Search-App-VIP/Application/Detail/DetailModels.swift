@@ -8,12 +8,9 @@ import UIKit
 
 enum Detail {
   // MARK: Use cases
-  
   enum Something {
 
-    struct Request {
-
-    }
+    struct Request {}
 
     struct Response {
         let image: UIImage
